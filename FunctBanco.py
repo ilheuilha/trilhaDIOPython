@@ -18,14 +18,49 @@ def depositar(deposito, saldo, extrato, /):
     if deposito > 0:
         saldo += deposito
 
-        extrato += f"Realizado o deposito de R$ {deposito:.2f}"
+        extrato += f"Realizado o deposito de R$ {deposito:.2f} \n\n"
 
-        print(extrato)
+        print("Deposito concluido com sucesso")
  
     else: 
         print("Erro ao depositar. Favor tentar novamente")
 
-    return saldo, extrato            
+    return saldo, extrato       
+
+def sacar(*, saldo, saque, extrato, limite, numero_saques, limite_saques):
+    
+    excedeu_valor_saldo = saque > saldo
+    excedeu_valor_limite = saque > limite
+    excedeu_valor_limite_saque = numero_saques >= limite_saques
+
+    if excedeu_valor_saldo:
+        print(f"Valor indisponivel. Você tem R$ {saldo} de saldo")
+    elif excedeu_valor_limite:
+        print("Valor do limite excedido")
+    elif excedeu_valor_limite_saque:
+        print("A quantidade de saque por dia foi atingido")
+    
+    elif saldo > 0:
+      
+        saldo -= saque
+        
+        extrato += f"\nVocê sacou R$ {saque:.2f} e tem de saldo R$ {saldo:.2f} \n"
+
+        numero_saques += 1    
+
+        print("Saque concluido")
+
+        
+    else:
+        print("Ocorreu um erro. Tente novamente mais tarde")
+    
+    return saldo, extrato
+
+def exibir_extrato(saldo, /, *, extrato):
+    print("\n ============== EXTRATO =============== ")
+    print("Não foram realizadas movimentações." if not extrato else extrato)
+    print(f"O seu saldo atual é de \n R$ {saldo:.2f}")
+    print("============== EXTRATO ===============")
 
 
 def main():
@@ -45,35 +80,18 @@ def main():
             
             saldo, extrato = depositar(deposito, saldo, extrato)
 
-        elif opcao  == "s":
+        elif opcao  == "s":            
             
-                if numero_saques < LIMITE_SAQUES:
-                        
-                    saque = float(input("Digite do valor do saque "))
+            saque = float(input("Digite do valor do saque "))
 
-                    if saldo == 0:
-                        print("limite insuficiente")
-                    else:    
-                        if saque > limite:
-                            print("Valor permitido de saque excedido")
-                        if saque > saldo:
-                            print("Saldo insuficiente")
+            saldo, extrato = sacar(saldo = saldo, saque = saque, extrato = extrato, limite = limite, numero_saques = numero_saques, limite_saques = LIMITE_SAQUES)
 
-                        else:
 
-                            saldo -= saque
-
-                            numero_saques += 1
-
-                            print(f"Você sacou R$ {saque:.2f} e tem de saldo R$ {saldo:.2f} ")
-                else:
-                    print("Você estourou o limite de saque permitido")
-    
         elif opcao == "e":
 
-            print("============== EXTRATO ===============")
-            print(f"O seu saldo atual é de R$ {saldo:.2f}")
-            print("============== EXTRATO ===============")
+            exibir_extrato(saldo, extrato=extrato)
+
+           
 
         elif opcao == "q":
             break
