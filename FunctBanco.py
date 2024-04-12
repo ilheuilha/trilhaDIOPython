@@ -7,6 +7,11 @@ def exibir_menu():
     [d] Depositar
     [s] Sacar
     [e] Extrato
+    [nc] Nova conta
+    [lc] Listar contas
+    [nu] Novo usuário
+    [lu] Listar usuário
+
     [q] Sair
 
     => """
@@ -62,6 +67,22 @@ def exibir_extrato(saldo, /, *, extrato):
     print(f"O seu saldo atual é de \n R$ {saldo:.2f}")
     print("============== EXTRATO ===============")
 
+def criarUsuario(usuarios):
+
+    cpf = int(input("Digite o numero do cpf (Somente numeros) "))
+
+    #if usuario != cpf:
+
+    nome = input("Digite o nome do usuario: ")
+    endereco = input("Digite a data de nascimento no formato (logradouro, nro - bairro - cidade/sigla estado):")
+    dataNasc = input("Digite a data de nascimento (dd-mm-aaaa): ")
+
+    usuarios.append({"nome": nome, "data_nascimento": dataNasc, "cpf": cpf, "endereco": endereco})
+
+    print("Usuario cadastrado com sucesso")
+        
+def listaCPF():
+    print("CPFs Cadastrados")
 
 def main():
     saldo = 0
@@ -69,6 +90,7 @@ def main():
     extrato = ""
     numero_saques = 0
     LIMITE_SAQUES = 3
+    usuarios = []
 
     while True:
 
@@ -91,7 +113,10 @@ def main():
 
             exibir_extrato(saldo, extrato=extrato)
 
-           
+        elif opcao =="nu":
+
+           criarUsuario(usuarios)
+
 
         elif opcao == "q":
             break
